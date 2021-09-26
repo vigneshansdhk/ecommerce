@@ -54,7 +54,7 @@
                               <td>{{$product->created_at}}</td>
                               <td>
                               <a href="{{url('admin-products-edit',['product_slug' => $product->slug])}}" class="btn btn-warning">Edit</a>
-                              <button class="btn btn-danger" wire:click="delete({{$product->id}})">Delete</button>
+                              <button class="btn btn-danger" onclick="confirm('Are You Sure to delete this?')|| event.stopImmediatePropagation()" wire:click="delete({{$product->id}})">Delete</button>
                               </td>
                               </tr>
                               @endforeach

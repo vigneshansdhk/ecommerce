@@ -12,6 +12,10 @@ class AdminEditCategoryComponent extends Component
 {
     public $category_slug,$category_id,$name,$slug;
 
+    public function generatestring(){
+        $this->slug = Str::slug($this->name);
+    }
+
     public function mount($category_slug){
         $this->category_slug = $category_slug;
         $category = Category::where('slug',$category_slug)->first();
@@ -19,11 +23,23 @@ class AdminEditCategoryComponent extends Component
         $this->name = $category->name;
         $this->slug = $category->slug; 
     }
+   
+    public function updated($fileds){
+        $this->validateOnly($fileds,[
+            'name'  => 'required',
+            'slug'  => 'required|unique:categories'
+        ]);
+    }
 
     public function update(){
+
+        $this->validate([
+            'name'  => 'required',
+            'slug'  => 'required|unique:categories'
+        ]);
         $category = Category::find($this->category_id);
         $category->name = $this->name;
-        $category->slug = Str::slug($this->slug);
+        $category->slug = $this->slug;
         $category->save();
         Session()->flash('success_message', ' Category is Updated Succesfully');
         return redirect('admin-categories');

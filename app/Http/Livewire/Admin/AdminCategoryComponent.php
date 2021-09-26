@@ -20,7 +20,7 @@ class AdminCategoryComponent extends Component
 
     public function render()
     {
-        $categories = Category::paginate(5);
+        $categories = Category::orderBy('id','desc')->paginate(5);
         return view('livewire.admin.admin-category-component',compact('categories'))->layout('layouts.base');
     }
 }

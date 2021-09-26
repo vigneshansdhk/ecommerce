@@ -42,7 +42,8 @@
                               <td>{{$category->slug}}</td>
                               <td>
                                   <a href="{{url('admin-categories-edit',['category_slug' => $category->slug])}}" class="btn btn-warning">Edit</a>
-                                  <button class="btn btn-danger" wire:click="delete({{$category->id}})">Delete</button>
+                                  <!-- <button class="btn btn-danger" onclick="return myFunction();" wire:click="delete({{$category->id}})">Delete</button> -->
+                                  <button class="btn btn-danger" onclick="confirm('Are You Sure to delete this?')|| event.stopImmediatePropagation()" wire:click="delete({{$category->id}})">Delete</button>
                               </td>
                               </tr>
                               @endforeach
@@ -55,3 +56,9 @@
        </div>
     </div>
 </div>
+ <!-- <script>
+  function myFunction() {
+      if(!confirm("Are You Sure to delete this"))
+      event.preventDefault();
+  }
+ </script> -->

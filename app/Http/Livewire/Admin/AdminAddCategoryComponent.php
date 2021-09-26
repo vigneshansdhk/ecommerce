@@ -10,10 +10,26 @@ class AdminAddCategoryComponent extends Component
 {
     public $name,$slug;
 
+    public function generatestring(){
+        $this->slug = Str::slug($this->name);
+    }
+    public function updated($fileds){
+        $this->validateOnly($fileds,[
+            'name'  => 'required',
+            'slug'  => 'required|unique:categories'
+        ]);
+    }
+
     public function store(){
+
+        $this->validate([
+            'name'  => 'required',
+            'slug'  => 'required|unique:categories'
+        ]);
+
          $category = new Category;
          $category->name = $this->name;
-         $category->slug = Str::slug($this->slug);
+         $category->slug =  $this->slug;
          $category->save();
          Session()->flash('success_message', ' Category is Add Succesfully');
          return redirect('admin-categories');

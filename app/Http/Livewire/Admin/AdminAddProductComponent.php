@@ -23,6 +23,8 @@ class AdminAddProductComponent extends Component
     }
 
     public function store(){
+
+       
         $product                    = new Product;
         $product->name              = $this->name;
         $product->slug              = Str::slug($this->slug);
