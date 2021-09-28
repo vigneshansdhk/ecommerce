@@ -17,10 +17,10 @@
                   <strong>Success</strong>{{Session::get('success_message')}}
               </div>
             @endif
-            @if(Cart::count() > 0)
+            @if(Cart::instance('cart')->count() > 0)
             <h3 class="box-title">Products Name</h3>
             <ul class="products-cart">
-                @foreach(Cart::content() as $item)
+                @foreach(Cart::instance('cart')->content() as $item)
                 <li class="pr-cart-item">
                     <div class="product-image">
                         <figure><img src="{{asset('assets/images/products')}}/{{$item->image}}" alt=""></figure>
@@ -35,6 +35,7 @@
                             <a class="btn btn-increase" href="#" wire:click.prevent="increaseqty('{{$item->rowId}}')"></a>
                             <a class="btn btn-reduce" href="#" wire:click.prevent="decreaseqty('{{$item->rowId}}')"></a>
                         </div>
+                        <p class="text-center"><a href="#" wire:click="switchToSaveForLater('{{$item->rowId}}')">Save For Later</a></p>
                     </div>
                     <div class="price-field sub-total"><p class="price">${{$item->subtotal}}</p></div>
                     <div class="delete">
@@ -54,10 +55,10 @@
         <div class="summary">
             <div class="order-summary">
                 <h4 class="title-box">Order Summary</h4>
-                <p class="summary-info"><span class="title">Subtotal</span><b class="index">${{Cart::subtotal()}}</b></p>
-                <p class="summary-info"><span class="title">Tax</span><b class="index">${{Cart::tax()}}</b></p>
+                <p class="summary-info"><span class="title">Subtotal</span><b class="index">${{Cart::instance('cart')->subtotal()}}</b></p>
+                <p class="summary-info"><span class="title">Tax</span><b class="index">${{Cart::instance('cart')->tax()}}</b></p>
                 <p class="summary-info"><span class="title">Shipping</span><b class="index">Free Shipping</b></p>
-                <p class="summary-info total-info "><span class="title">Total</span><b class="index">${{Cart::total()}}</b></p>
+                <p class="summary-info total-info "><span class="title">Total</span><b class="index">${{Cart::instance('cart')->total()}}</b></p>
             </div>
             <div class="checkout-info">
                 <label class="checkbox-field">
@@ -70,6 +71,43 @@
                 <a class="btn btn-clear"wire:click.prevent="deleteAll()" href="#">Clear Shopping Cart</a>
                 <a class="btn btn-update" href="#">Update Shopping Cart</a>
             </div>
+        </div>
+
+
+        <div class="wrap-iten-in-cart">
+            <h3 class="title-box" style="border-bottom : 1px solid; padding-bottom: 15px;">{{Cart::instance('saveForLater')->count()}} item(s) Saved For Later</h3>
+            @if(Session::has('s_success_message'))
+              <div class="alert alert-success">
+                  <strong>Success</strong>{{Session::get('s_success_message')}}
+              </div>
+            @endif
+            @if(Cart::instance('saveForLater')->count() > 0)
+            <h3 class="box-title">Products Name</h3>
+            <ul class="products-cart">
+                @foreach(Cart::instance('saveForLater')->content() as $item)
+                <li class="pr-cart-item">
+                    <div class="product-image">
+                        <figure><img src="{{asset('assets/images/products')}}/{{$item->image}}" alt=""></figure>
+                    </div>
+                    <div class="product-name">
+                        <a class="link-to-product" href="{{url('products',['slug'=>$item->slug])}}">{{$item->name}}</a>
+                    </div>
+                    <div class="price-field produtc-price"><p class="price">${{$item->price}}</p></div>
+                    <div class="quantity">
+                        <p class="text-center"><a href="#" wire:click="movetocart('{{$item->rowId}}')">Move to Cart</a></p>
+                    </div>
+                    <div class="delete">
+                        <a href="#"  wire:click.prevent="deletefromsaveforlater('{{$item->rowId}}')"class="btn btn-delete" title="">
+                            <span>Delete from save for later</span>
+                            <i class="fa fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </li>
+                @endforeach												
+            </ul>
+              @else
+                <p>No item saved for later</p>
+            @endif
         </div>
 
         <div class="wrap-show-advance-info-box style-1 box-in-site">
